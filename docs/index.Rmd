@@ -1,0 +1,131 @@
+---
+title: "STAT 534 - Lecture 21: Key"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(fig.align= 'center')
+knitr::opts_chunk$set(fig.height= 3)
+knitr::opts_chunk$set(fig.width = 5)
+library(tidyverse)
+library(gridExtra)
+library(ggplot2)
+set.seed(04082019)
+```
+
+# Point Process Data
+
+### Point Process Motivation
+
+With point process data, the defining characteristic is that the location is random. Sketch two hypothetical point processes: one with a pattern and one without any spatial pattern.
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+How did you select the number of points to add to your figure?
+\vfill
+- *With point process data, assume a bounded region $\mathcal{D}$ with realizations $\boldsymbol{s}_i$, where $i = 1, ..., n$.*
+\vfill
+- *_Both_ $n$ and the $\boldsymbol{s}_i$ are random.*
+\vfill
+
+There are many interesting questions related to point process data.
+Consider, for example, locations of Ponderosa Pines and Aspen Trees. With location data for these trees, we can answer the following questions:
+
+- *What do the occurence patterns look like?*
+\vfill  
+- *Do the different species have different patterns?*
+\vfill
+- *Can environmental factors explain the occurence pattern and do they differ by species?*
+\vfill
+
+Point process data is also prevalent in public health settings; in this context the goal is to understand disease patterns. \vfill
+- *Are there disease outbreaks?*
+\vfill
+- *Do locations of disease cluster?*
+\vfill
+- *Is there an evolution of patterns over time?*
+\vfill
+
+\newpage
+If there is additional meta-information associated with a point pattern, this can be used in what is known as a _marked_ point process. For instance, the location of a tree could be considered the point process with the marks associated with tree species.
+
+\vfill
+
+Discuss the interpretation of marked point process data set with continuous data. For instance, suppose that rather than tree species that the height of the tree was collected. What questions would be of interest?
+
+\vfill
+
+
+### Exploratory Point Process Analysis
+
+With point process data, there are a few things to assess.
+
+*1. Is there complete randomness or spatial homogeneity?*
+
+```{r}
+n <- rpois(4, 50)
+
+x <- c(rbeta(n[1], 1, 1), rbeta(n[2], 1, 1), rbeta(n[3], 3, 1),rbeta(n[4], 3, 3))
+y <- c(rbeta(n[1], 1, 1), rbeta(n[2], 1, 1), rbeta(n[3], 3, 1),rbeta(n[4], 3, 3))
+
+data.frame(group = c(rep(1, n[1]), rep(2, n[2]), rep(3, n[3]), rep(4, n[4])), x = x, y = y) %>% ggplot(aes(x=x, y=y)) + geom_point() + facet_wrap(~group)
+```
+\vfill
+*2. How does the process differ from spatial homogeneity?*
+\vfill
+*3. Can the spatial heterogeneity be explained by environmental factors that can be used in a regression model?*
+\vfill
+*4. Is there clustering (attraction) or inhibition (repulsion) of points?*
+\vfill
+ 
+\newpage 
+
+### Theoretical Details
+
+- Our focus will be largely on $\mathcal{R}^2$, but the same principles apply for other dimensions.
+
+\vfill
+
+- A random realization of a point pattern is denoted $\mathcal{S}$ with elements $\boldsymbol{s}_1, \dots,  \boldsymbol{s}_n$. Hence, $\mathcal{S}$ is random and inference focuses on a probabilistic model for $\mathcal{S} \in \mathcal{D}$.
+
+\vfill
+
+To specify a probabilistic model for $\mathcal{S}$, there are two essential elements.
+
+1. *A distribution for $\mathcal{N}(D)$, the number of points in $\mathcal{D}$ and*
+ \vfill
+2. *A multivariate density over $\mathcal{D}$ for $f(\boldsymbol{s}_1, \dots,  \boldsymbol{s}_n)$, which is often referred to as the location density.*
+\vfill
+- Then the likelihood of $\mathcal{S}$ can be written as
+$$\mathcal{L}(\mathcal{S}) = Pr(\mathcal{N}(d) = n) n! f(\boldsymbol{s}_1, \dots,  \boldsymbol{s}_n)$$
+\vfill
+- Given the likelihood, *the point pattern model is stationary if $$f(\boldsymbol{s}_1, \dots,  \boldsymbol{s}_n) = f(\boldsymbol{s}_1 + \boldsymbol{h}, \dots,  \boldsymbol{s}_n+ \boldsymbol{h})$$*
+\vfill
+
+#### Counting Measure
+- The first part of a point process is the number of points.
+\vfill
+- *Let $\mathcal{B}$ be a set, then $N(\mathcal{B})$ is the number of points in $\mathcal{B}$. This can be computed as $\sum_{\boldsymbol{s}_i \in \mathcal{S}} 1(\boldsymbol{s}_i \in \mathcal{B})$*
+\vfill
+- One common approach for the counting measure is a Poisson Process.
+\vfill
+- *Thus $N(\mathcal{B}) \sim Pois(\lambda(\mathcal{B})),$ where $\lambda()$ is the intensity function.*
+\vfill
+
+\newpage
+- If $\mathcal{B}_1$ and $\mathcal{B}_2$ are disjoint, then $N(\mathcal{B})_1$ and $N(\mathcal{B})_2$ are independent.
+\vfill
+- Sketch $\mathcal{D}$ such that $\mathcal{B}_1$ and $\mathcal{B}_2$ are disjoint.
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+- What would $\lambda(\mathcal{B}_1)$ and $\lambda(\mathcal{B}_2)$ be if we had spatial homogeneity?
+\vfill
